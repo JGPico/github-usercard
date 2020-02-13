@@ -7,10 +7,8 @@
 const entry = document.querySelector('.cards')
 
 axios.get('https://api.github.com/users/JGPico').then(response => {
-  console.log(response);
-  response.data.forEach(element => {
-    entry.append(newUser(element));
-  })
+  console.log(response.data);
+  entry.append(newUser(response.data));
 }).catch(error => {
   console.log('Shit has hit the fan', error);
 })
@@ -38,7 +36,18 @@ axios.get('https://api.github.com/users/JGPico').then(response => {
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['frankie95667', 'jscheuble', 'landoDev', 'josiahroa18', 'teaguehannam'];
+
+followersArray.forEach( element => {
+  axios.get('https://api.github.com/users/' + element).then(response => {
+    console.log(response.data);
+    entry.append(newUser(response.data));
+  })
+}).catch(error => {
+  console.log('A whole array of shit has hit the fan', error);
+})
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -62,7 +71,7 @@ const followersArray = [];
 
 function newUser(obj) {
   const newCard = document.createElement('div'),
-        newImg = document.createElement('img'),
+        newImage = document.createElement('img'),
         cardInfo = document.createElement('div'),
         newName = document.createElement('h3'),
         newUsername = document.createElement('p'),
@@ -73,17 +82,17 @@ function newUser(obj) {
         newFollowing = document.createElement('p'),
         newBio = document.createElement('p');
 
-  newImage = obj.data.avatar_url;
-  newName = obj.data.name;
-  newUsername = obj.data.login;
-  newLocation = obj.data.location;
-  newATag = obj.data.html_url;
-  newFollowers = obj.data.followers_url;
-  newFollowing = obj.data.following_url;
-  newBio = obj.data.bio;
+  newImage.src = obj.avatar_url;
+  newName.textContent = obj.name;
+  newUsername.textContent = obj.login;
+  newLocation.textContent = obj.location;
+  newATag.textContent = obj.html_url;
+  newFollowers.textContent = obj.followers_url;
+  newFollowing.textContent = obj.following_url;
+  newBio.textContent = obj.bio;
 
-  newCard.classList('card');
-  cardInfo.classList('card-info');
+  newCard.classList.add('card');
+  cardInfo.classList.add('card-info');
 
   newProfile.append(newATag);
   cardInfo.append(newName);
@@ -93,7 +102,7 @@ function newUser(obj) {
   cardInfo.append(newFollowers);
   cardInfo.append(newFollowing);
   cardInfo.append(newBio);
-  newCard.append(newImg);
+  newCard.append(newImage);
   newCard.append(cardInfo);
 
   return newCard;
