@@ -3,6 +3,19 @@
            https://api.github.com/users/<your name>
 */
 
+
+const entry = document.querySelector('.cards')
+
+axios.get('https://api.github.com/users/JGPico').then(response => {
+  console.log(response);
+  response.data.forEach(element => {
+    entry.append(newUser(element));
+  })
+}).catch(error => {
+  console.log('Shit has hit the fan', error);
+})
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -13,6 +26,7 @@
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
 */
+
 
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
@@ -45,6 +59,46 @@ const followersArray = [];
 </div>
 
 */
+
+function newUser(obj) {
+  const newCard = document.createElement('div'),
+        newImg = document.createElement('img'),
+        cardInfo = document.createElement('div'),
+        newName = document.createElement('h3'),
+        newUsername = document.createElement('p'),
+        newLocation = document.createElement('p'),
+        newProfile = document.createElement('p'),
+        newATag = document.createElement('a'),
+        newFollowers = document.createElement('p'),
+        newFollowing = document.createElement('p'),
+        newBio = document.createElement('p');
+
+  newImage = obj.data.avatar_url;
+  newName = obj.data.name;
+  newUsername = obj.data.login;
+  newLocation = obj.data.location;
+  newATag = obj.data.html_url;
+  newFollowers = obj.data.followers_url;
+  newFollowing = obj.data.following_url;
+  newBio = obj.data.bio;
+
+  newCard.classList('card');
+  cardInfo.classList('card-info');
+
+  newProfile.append(newATag);
+  cardInfo.append(newName);
+  cardInfo.append(newUsername);
+  cardInfo.append(newLocation);
+  cardInfo.append(newProfile);
+  cardInfo.append(newFollowers);
+  cardInfo.append(newFollowing);
+  cardInfo.append(newBio);
+  newCard.append(newImg);
+  newCard.append(cardInfo);
+
+  return newCard;
+
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
